@@ -1,4 +1,4 @@
-SELECT cohorts.name, SUM(started_at-created_at) AS total_duration_time
+SELECT cohorts.name, SUM(completed_at-started_at) AS total_duration_time
 FROM assistance_requests
 JOIN students ON students.id = assistance_requests.student_id
 JOIN cohorts ON cohorts.id = cohort_id
