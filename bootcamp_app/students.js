@@ -12,13 +12,19 @@ const pool = new Pool({
   database: 'bootcampx'
 });
 
-pool.query(`
-      SELECT students.id, students.name, cohorts.name AS cohort
-      FROM students
-      JOIN cohorts ON cohorts.id = cohort_id
-      WHERE cohorts.name LIKE '%${process.argv[2]}%'
-      LIMIT ${process.argv[3] || 5};
-`)
+const quaryString = `
+SELECT students.id, students.name, cohorts.name AS cohort
+FROM students
+JOIN cohorts ON cohorts.id = cohort_id
+WHERE cohorts.name LIKE $1
+LIMIT $2;
+`;
+
+const limit = process.argv[3] || 5;
+const cohortName = process.argv[2];
+const values = [`%${cohortName}%`, limit];
+
+pool.query(quaryString, values)
 .then(res => {
   // console.log(res);
   res.rows.forEach(user => {
